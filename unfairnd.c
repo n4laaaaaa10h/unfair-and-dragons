@@ -1,0 +1,74 @@
+//lets just hope gua ngoding ga kayak jason "pirate software" thorhall atau alex "yanderedev" mahan
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+
+#define MAX_NAME 32
+#define MAX_INV 20
+#define SAVEFILE "savegame.dat"
+
+typedef struct {
+    char name[MAX_NAME];
+    int price;
+    int healAmount; // potion healing value; 0 alabipa bukan potion
+    int attackBonus; // opsional. like, literally.
+} Item;
+
+typedef struct {
+    char name[MAX_NAME];
+    int hp, maxHp;
+    int attack;
+    int defense;
+    int level;
+    int exp;
+    int gold;
+    Item inventory[MAX_INV];
+    int invCount;
+} Player;
+
+typedef struct {
+    char name[MAX_NAME];
+    int hp;
+    int attack;
+    int defense;
+    int expReward;
+    int goldReward;
+} Enemy;
+
+/* ---------- the many void ---------- */
+void initPlayer(Player *p);
+void mainMenu(Player *p);
+void startNewGame(Player *p);
+void explore(Player *p);
+void battle(Player *p, Enemy en);
+void showStats(const Player *p);
+void showInventory(const Player *p);
+void addItem(Player *p, Item it);
+void useItem(Player *p);
+void shop(Player *p);
+void saveGame(const Player *p);
+int loadGame(Player *p);
+int riggedD20();
+void sortInventoryByName(Player *p);
+void sortInventoryByPrice(Player *p);
+int searchItemByName(const Player *p, const char *name); // return index atau niga 1
+int getInt();
+void pressEnterToContinue();
+
+//dont know what else should i add. jujur. skip ke shopitems buat sample data aja dulu. berharap ke tuhan segini cukup.
+
+Item shopItems[] = {
+    {"Potion Butut", 10, 20, 0},
+    {"Potion Yang Begitu Deh", 30, 50, 0},
+    {"Potion Maha Obelix", 80, 120, 0},
+    {"Pedang Tetanus", 50, 0, 3},
+    {"Pedang Gitu Gitu Aja", 150, 0, 7},
+    {"Tameng Ga Jelas", 120, 0, 0}
+};
+int shopItemsCount = sizeof(shopItems)/sizeof(shopItems[0]);
+
+//screw spotify and their stupid changes to their premium plans btw.
+
+
