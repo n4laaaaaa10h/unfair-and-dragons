@@ -71,4 +71,27 @@ int shopItemsCount = sizeof(shopItems)/sizeof(shopItems[0]);
 
 //screw spotify and their stupid changes to their premium plans btw.
 
+Enemy enemyPool[] = {
+    {"Slime", 20, 4, 1, 10, 5},
+    {"Goblin", 35, 6, 2, 20, 10},
+    {"Wolf", 45, 8, 3, 30, 15},
+    {"Bandit", 60, 10, 4, 50, 25},
+    {"Orc", 90, 14, 6, 80, 50}
+};
+int enemyPoolCount = sizeof(enemyPool)/sizeof(enemyPool[0]);
 
+//uitel utility
+int getInt() {
+    int x;
+    while (scanf("%d", &x) != 1) {
+        while (getchar() != '\n');
+        printf("Input invalid. Try again: ");
+    }
+    while (getchar() != '\n'); // clear rest
+    return x;
+}
+
+void pressEnterToContinue() {
+    printf("\n[Press Enter to continue]");
+    getchar();
+}
