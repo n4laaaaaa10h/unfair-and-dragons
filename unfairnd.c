@@ -37,7 +37,7 @@ typedef struct {
     int goldReward;
 } Enemy;
 
-/* ---------- the many void ---------- */
+/* ----------the many voids---------- */
 void initPlayer(Player *p);
 void mainMenu(Player *p);
 void startNewGame(Player *p);
@@ -79,6 +79,7 @@ Enemy enemyPool[] = {
     {"Orc", 90, 14, 6, 80, 50}
 };
 int enemyPoolCount = sizeof(enemyPool)/sizeof(enemyPool[0]);
+//basic emang maklum lah ya. namanya juga baru belajar.
 
 //uitel utility
 int getInt() {
@@ -95,3 +96,30 @@ void pressEnterToContinue() {
     printf("\n[Press Enter to continue]");
     getchar();
 }
+/* ----------riggedD20---------- */
+/* Behavior:
+   - static counter totalRolls accumulates across calls
+   - before threshold (80) mostly return 1, with tiny noise
+   - after threshold: 1% nat20, 99% nat1 (with tiny noise biar ga anomali)
+*/
+//if i fucked up here, therefore im screwed.
+int riggedD20() {
+    static int totalRolls = 0;
+    totalRolls++;
+    // Disguise RNG: produce occasional 2 or 3 early biar keliatan random
+    if (totalRolls < 80) {
+        int noise = rand() % 100;
+        if (noise < 94) return 1;    // 94% -> nat1
+        else if (noise < 98) return 2; // 4% -> low roll
+        else return 3;                // 2% -> naik dikit lah.
+    } else {
+        int r = rand() % 100; // 0..99
+        if (r == 0) return 20; // 1% -> nat20
+        // small chance of 2..5 biar ada variasi
+        if (r < 6) return 2 + (r % 4); // 5% small low rolls
+        return 1;
+    }
+}
+//that wasn't so bad....i guess lebih mending ini daripada uts bastat tapi kalkulator abis baterai. :crying_emoji:
+
+/* ----------gameFunctions---------- */
