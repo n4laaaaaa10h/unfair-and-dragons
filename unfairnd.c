@@ -99,26 +99,28 @@ void pressEnterToContinue() {
 /* ----------riggedD20---------- */
 /* Behavior:
    - static counter totalRolls accumulates across calls
-   - before threshold (80) mostly return 1, with tiny noise
+   - before threshold (30) mostly return 1, with tiny noise
    - after threshold: 1% nat20, 99% nat1 (with tiny noise biar ga anomali)
 */
 //if i fucked up here, therefore im screwed.
 int riggedD20() {
     static int totalRolls = 0;
     totalRolls++;
-    // Disguise RNG: produce occasional 2 or 3 early biar keliatan random
-    if (totalRolls < 80) {
-        int noise = rand() % 100;
-        if (noise < 94) return 1;    // 94% -> nat1
-        else if (noise < 98) return 2; // 4% -> low roll
-        else return 3;                // 2% -> naik dikit lah.
-    } else {
-        int r = rand() % 100; // 0..99
-        if (r == 0) return 20; // 1% -> nat20
-        // small chance of 2..5 biar ada variasi
-        if (r < 6) return 2 + (r % 4); // 5% small low rolls
-        return 1;
+
+    int r = rand() % 100; // 0 - 99
+
+    // Phase 1: sebelum roll ke-80
+    if (totalRolls < 30) {
+        if (r < 70) return 1;              // 70% nat 1
+        else if (r < 90) return 2 + r % 4; // 20% roll 2-5
+        else return 6 + r % 5;             // 10% roll 6-10
     }
+
+    // Phase 2: setelah roll ke-80
+    if (r == 0) return 20;                 // 1% nat 20
+    else if (r < 60) return 1;             // 59% nat 1
+    else if (r < 85) return 2 + r % 4;     // 25% roll 2-5
+    else return 6 + r % 10;                // 15% roll 6-15
 }
 //that wasn't so bad....i guess lebih mending ini daripada uts bastat tapi kalkulator abis baterai. :crying_emoji:
 
@@ -130,10 +132,10 @@ void initPlayer(Player *p) {
     p->defense = 2;
     p->level = 1;
     p->exp = 0;
-    p->gold = 50;
+    p->gold = 100;
     p->invCount = 0;
 
-    addItem(p, (Item){"Potion Butut", 10, 20, 0});
+    addItem(p, (Item){"Lite Potion", 10, 20, 0});
 }
 
 void startNewGame(Player *p) {
